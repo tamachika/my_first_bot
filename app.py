@@ -52,17 +52,14 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if event.message.text < "0":
-        pass
-    else:
-        i = int(event.message.text)
-        if i <= 1:
-            return False
-        for j in range(2, int(i**0.5) + 1):
-            if i % j == 0:
-                ans = "False"
-                break
-        ans = "True"
+    i = int(event.message.text)
+    if i <= 1:
+        return False
+    ans = "素数です"
+    for j in range(2, int(i**0.5) + 1):
+        if i % j == 0:
+            ans = "合成数です"
+            break
     line_bot_api.reply_message(event.reply_token,
                                TextSendMessage(text=f"{event.message.text}は{ans}"))
 
