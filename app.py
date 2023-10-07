@@ -52,10 +52,10 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if message.text == 1:
+    if event.message.text < "0":
         pass
     else:
-        i = int(message.text)
+        i = int(event.message.text)
         if i <= 1:
             return False
         for j in range(2, int(i**0.5) + 1):
