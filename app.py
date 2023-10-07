@@ -5,6 +5,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from dotenv import load_dotenv
+from chat import chat_completion
 
 load_dotenv()
 
@@ -53,16 +54,21 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     i = int(event.message.text)
-    if i <= 1:
-        return False
-    ans = "素数です"
-    for j in range(2, int(i**0.5) + 1):
-        if i % j == 0:
-            ans = "合成数です"
-            break
-    line_bot_api.reply_message(event.reply_token,
+    if type(i) == int:
+        if i <= 1:
+            return False
+        ans = "素数です"
+        for j in range(2, int(i**0.5) + 1):
+            if i % j == 0:
+                ans = "合成数です"
+                break
+        line_bot_api.reply_message(event.reply_token,
                                TextSendMessage(text=f"{event.message.text}は{ans}"))
-
+    else:
+         reply_message = chat_completion(event.message.text)   
+         line_bot_api.reply_message(event.reply_token,
+                               TextSendMessage(text=reply_message))
+    
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
